@@ -97,6 +97,13 @@ button {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  width: 250px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
 }
 </style>
 </head>
@@ -185,8 +192,13 @@ button {
 <!-- CARRITO -->
 <div class="carrito-box">
   <h3>Carrito</h3>
+  
+  <input type="text" id="nombreCliente" placeholder="Tu nombre">
+
   <div id="lista"></div>
   <p id="total">Total: 0</p>
+
+  <button onclick="verRecibo()">Ver recibo 🧾</button>
 </div>
 
 <script>
@@ -205,10 +217,7 @@ function abrir(nombre, desc, precio, img){
   document.getElementById("precio").innerText = "COP: " + parseInt(precio).toLocaleString('es-CO');
   document.getElementById("imgModal").src = img;
 
-  productoActual = {
-    nombre: nombre,
-    precio: precio
-  };
+  productoActual = {nombre, precio};
 }
 
 function cerrar(){
@@ -229,12 +238,33 @@ function actualizarCarrito(){
   carrito.forEach(p => {
     let precioNum = parseInt(p.precio);
     total += precioNum;
-
     html += `<p>${p.nombre} - COP: ${precioNum.toLocaleString('es-CO')}</p>`;
   });
 
   lista.innerHTML = html;
   document.getElementById("total").innerText = "Total: COP " + total.toLocaleString('es-CO');
+}
+
+function verRecibo(){
+  let nombre = document.getElementById("nombreCliente").value;
+  let total = 0;
+  let detalle = "";
+
+  carrito.forEach(p => {
+    let precioNum = parseInt(p.precio);
+    total += precioNum;
+    detalle += p.nombre + " - COP: " + precioNum.toLocaleString('es-CO') + "\n";
+  });
+
+  let fecha = new Date();
+
+  alert(
+    "🧾 RECIBO\n\n" +
+    "Cliente: " + nombre + "\n\n" +
+    "Pedido:\n" + detalle +
+    "\nTotal: COP " + total.toLocaleString('es-CO') +
+    "\n\nFecha: " + fecha.toLocaleString()
+  );
 }
 </script>
 
