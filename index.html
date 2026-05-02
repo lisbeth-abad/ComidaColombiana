@@ -23,7 +23,6 @@ body {
   position: relative;
 }
 
-/* sombra para que el texto se vea */
 #inicio::before {
   content: "";
   position: absolute;
@@ -269,7 +268,6 @@ function verPedido(){
   carrito.forEach(p => {
     let precioNum = parseInt(p.precio);
     total += precioNum;
-
     detalle += p.nombre + " - COP: " + precioNum.toLocaleString('es-CO') + "\n";
   });
 
@@ -279,16 +277,6 @@ function verPedido(){
     "Cliente: " + nombre + "\n\n" +
     "Pedido:\n" + detalle +
     "\nTotal: COP: " + total.toLocaleString('es-CO') +
-    "\n\nFecha: " + fecha.toLocaleString()
-  );
-}
-
-  let fecha = new Date();
-
-  alert(
-    "Cliente: " + nombre + "\n\n" +
-    "Pedido:\n" + detalle +
-    "\nTotal: COP:" + total +
     "\n\nFecha: " + fecha.toLocaleString()
   );
 }
