@@ -20,7 +20,6 @@ header {
   font-size: 22px;
 }
 
-/* GRID MEJORADO */
 .menu {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -41,10 +40,9 @@ header {
   transform: scale(1.03);
 }
 
-
 .card img {
   width: 100%;
-  height: 150px; 
+  height: 150px;
   object-fit: cover;
 }
 
@@ -57,7 +55,6 @@ header {
   color: gray;
 }
 
-/* MODAL */
 .modal {
   position: fixed;
   top: 0;
@@ -79,7 +76,6 @@ header {
   max-width: 400px;
 }
 
-
 .modal-content img {
   width: 100%;
   height: 200px;
@@ -96,6 +92,17 @@ button {
   margin-top: 10px;
   cursor: pointer;
 }
+
+/* carrito */
+.carrito-box {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
 </style>
 </head>
 
@@ -105,56 +112,54 @@ button {
 
 <div class="menu">
 
-<div class="card" onclick="abrir('Aritos de cebolla','Cortados a mano, envueltos en una mezcla ligera y fritos hasta alcanzar un dorado perfecto','COP:7,200','foto-heroe-1024x693.jpg')">
+<div class="card" onclick="abrir('Aritos de cebolla','Cortados a mano, envueltos en una mezcla ligera y fritos hasta alcanzar un dorado perfecto','7200','foto-heroe-1024x693.jpg')">
 <img src="foto-heroe-1024x693.jpg">
 <h3>Aritos de cebolla</h3>
 <p>COP:7,200</p>
 </div>
 
-<div class="card" onclick="abrir('Picada','Deliciosa combinación de carnes, rellena, chicharrón, acompañada de papa griolla, arepa y salsas ','COP:32,000','plato1.jpg')">
+<div class="card" onclick="abrir('Picada','Deliciosa combinación de carnes, rellena, chicharrón, acompañada de papa criolla, arepa y salsas','32000','plato1.jpg')">
 <img src="plato1.jpg">
 <h3>Picada</h3>
 <p>COP:32,000</p>
 </div>
 
-<div class="card" onclick="abrir('Burritos','Torta rellena de carne, verdura fresca y salsas intensas','COP:14,000','burritos.jpg')">
+<div class="card" onclick="abrir('Burritos','Torta rellena de carne, verdura fresca y salsas intensas','14000','burritos.jpg')">
 <img src="burritos.jpg">
 <h3>Burritos</h3>
 <p>COP:14,000</p>
 </div>
 
-<div class="card" onclick="abrir('Pastel de chocolate','Deliciosa porción de pastel con intenso sabor a chocolate','COP:5,000','pastel.jpg')">
+<div class="card" onclick="abrir('Pastel de chocolate','Deliciosa porción de pastel con intenso sabor a chocolate','5000','pastel.jpg')">
 <img src="pastel.jpg">
 <h3>Pastel de chocolate</h3>
 <p>COP:5,000</p>
 </div>
 
-<div class="card" onclick="abrir('HOT-DOG','Salchica jugosa en pan suave con mostaza, salsa y topic deliciosos','COP:10,000','hot-dog.jpg')">
+<div class="card" onclick="abrir('HOT-DOG','Salchicha jugosa en pan suave con mostaza, salsa y toppings deliciosos','10000','hot-dog.jpg')">
 <img src="hot-dog.jpg">
 <h3>Hot-Dog</h3>
 <p>COP:10,000</p>
 </div>
 
-
-
-
-<div class="card" onclick="abrir('Pizza de pepperoni','Masa crujiente con queso fundido y pepperoni','COP:6,000','pizza.png')">
+<div class="card" onclick="abrir('Pizza de pepperoni','Masa crujiente con queso fundido y pepperoni','6000','pizza.png')">
 <img src="pizza.png">
 <h3>Pizza de pepperoni</h3>
 <p>COP:6,000</p>
 </div>
 
-<div class="card" onclick="abrir('Alitas Barbiquiu','Deliciosa porción de pastel con intenso sabor a chocolate','COP:16,000','alitates.jpg')">
+<div class="card" onclick="abrir('Alitas Barbiquiu','Alitas jugosas bañadas en salsa BBQ','16000','alitates.jpg')">
 <img src="alitates.jpg">
 <h3>Alitas Barbiquiu</h3>
 <p>COP:16,000</p>
 </div>
 
-<div class="card" onclick="abrir('Hamburguesa','Jugosa hamburguesa con carne a la parilla, queso derretido, lechugafresca y salsas especiales','COP:15,000','hamburguesa.jpg')">
+<div class="card" onclick="abrir('Hamburguesa','Jugosa hamburguesa con carne a la parrilla, queso derretido, lechuga fresca y salsas especiales','15000','hamburguesa.jpg')">
 <img src="hamburguesa.jpg">
 <h3>Hamburguesa</h3>
 <p>COP:15,000</p>
 </div>
+
 </div>
 
 <div class="modal" id="modal">
@@ -163,26 +168,58 @@ button {
     <h2 id="titulo"></h2>
     <p id="desc"></p>
     <p id="precio"></p>
-    <button onclick="ordenar()">Ordenar</button><br>
+    <button onclick="agregarCarrito()">Agregar al carrito 🛒</button><br>
     <button onclick="cerrar()">Cerrar</button>
   </div>
 </div>
 
+<!-- CARRITO -->
+<div class="carrito-box">
+  <input type="text" id="nombreCliente" placeholder="Tu nombre"><br>
+  <button onclick="verPedido()">Ver pedido</button>
+</div>
+
 <script>
+let carrito = [];
+let productoActual = {};
+
 function abrir(nombre, desc, precio, img){
   document.getElementById("modal").style.display = "flex";
   document.getElementById("titulo").innerText = nombre;
   document.getElementById("desc").innerText = desc;
-  document.getElementById("precio").innerText = precio;
+  document.getElementById("precio").innerText = "COP: " + precio;
   document.getElementById("imgModal").src = img;
+
+  productoActual = {nombre, precio};
 }
 
 function cerrar(){
   document.getElementById("modal").style.display = "none";
 }
 
-function ordenar(){
-  alert("Pedido agregado 🛒");
+function agregarCarrito(){
+  carrito.push(productoActual);
+  alert("Agregado al carrito 🛒");
+}
+
+function verPedido(){
+  let nombre = document.getElementById("nombreCliente").value;
+  let total = 0;
+  let detalle = "";
+
+  carrito.forEach(p => {
+    total += parseInt(p.precio);
+    detalle += p.nombre + " - COP:" + p.precio + "\n";
+  });
+
+  let fecha = new Date();
+
+  alert(
+    "Cliente: " + nombre + "\n\n" +
+    "Pedido:\n" + detalle +
+    "\nTotal: COP:" + total +
+    "\n\nFecha: " + fecha.toLocaleString()
+  );
 }
 </script>
 
