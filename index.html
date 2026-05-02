@@ -15,51 +15,47 @@ body {
 #inicio {
   height: 100vh;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   padding: 40px;
-  background: url('inicio.jpg') no-repeat center center/cover;
+  background: url('inicio.jpg') no-repeat center/cover;
   color: white;
   position: relative;
 }
 #inicio::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
+  content:"";
+  position:absolute;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
 }
-#inicio div { position: relative; z-index: 1; }
+#inicio div { position:relative; z-index:1; }
 
 /* MENU */
 header {
-  background: #ff5722;
-  color: white;
-  padding: 15px;
-  text-align: center;
+  background:#ff5722;
+  color:white;
+  padding:15px;
+  text-align:center;
 }
 .menu {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  padding: 15px;
-  background: #f4f4f4;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  padding:15px;
+  background:#f4f4f4;
 }
 .card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
 }
 .card img { width:100%; height:150px; object-fit:cover; }
-.card h3 { margin:10px; }
 
 /* MODAL */
 .modal {
-  position: fixed;
+  position:fixed;
   width:100%; height:100%;
-  background: rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
   align-items:center;
@@ -82,43 +78,35 @@ button {
   padding:10px;
   border-radius:8px;
   margin-top:10px;
-  cursor:pointer;
 }
 
-.carrito {
+/* 🛒 BOTÓN FLOTANTE */
+.carrito-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #ff5722;
+  color: white;
+  padding: 12px;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+/* 🛒 PANEL */
+.carrito-panel {
   position: fixed;
   bottom: 0;
   right: 0;
-  width: 300px;
-  max-height: 80%;
+  width: 280px;
   background: white;
-  border-top-left-radius: 15px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+  box-shadow: -2px 0 10px rgba(0,0,0,0.3);
   padding: 15px;
-  overflow-y: auto;
+  display: none;
 }
-
-.carrito h3 { margin-top:0; }
 
 .item {
   display:flex;
   justify-content:space-between;
-  margin-bottom:5px;
-}
-
-.total {
-  font-weight:bold;
-  margin-top:10px;
-}
-
-.badge {
-  position: fixed;
-  bottom: 90px;
-  right: 20px;
-  background: red;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 50%;
 }
 </style>
 </head>
@@ -140,7 +128,7 @@ button {
 
 <div class="menu">
 
-
+<!-- NO TOQUÉ TUS COMIDAS -->
 <div class="card" onclick="abrir('Aritos de cebolla','Cortados a mano, envueltos en una mezcla ligera y fritos hasta alcanzar un dorado perfecto','7200','foto-heroe-1024x693.jpg')">
 <img src="foto-heroe-1024x693.jpg">
 <h3>Aritos de cebolla</h3>
@@ -199,28 +187,24 @@ button {
     <h2 id="titulo"></h2>
     <p id="desc"></p>
     <p id="precio"></p>
-    <button onclick="agregarCarrito()">Agregar 🛒</button>
+    <button onclick="agregarCarrito()">Agregar</button>
     <button onclick="cerrar()">Cerrar</button>
   </div>
 </div>
 
-<!-- 🛒 CARRITO VISUAL -->
-<div class="carrito">
+<!-- BOTÓN CARRITO -->
+<div class="carrito-btn" onclick="toggleCarrito()">🛒 <span id="count">0</span></div>
+
+<!-- PANEL -->
+<div class="carrito-panel" id="panel">
   <h3>Tu pedido</h3>
   <div id="lista"></div>
-
-  <input type="text" id="nombreCliente" placeholder="Nombre completo">
-
-  <div class="total" id="total">Total: COP 0</div>
-
-  <button onclick="enviarWhatsApp()">Enviar pedido</button>
+  <p id="total"></p>
 </div>
 
-<div class="badge" id="contador">0</div>
-
 <script>
-let carrito = [];
-let productoActual = {};
+let carrito=[];
+let productoActual={};
 
 function verMenu(){
   inicio.style.display="none";
@@ -231,7 +215,7 @@ function abrir(n,d,p,i){
   modal.style.display="flex";
   titulo.innerText=n;
   desc.innerText=d;
-  precio.innerText="COP: "+parseInt(p).toLocaleString('es-CO');
+  precio.innerText="COP "+parseInt(p).toLocaleString('es-CO');
   imgModal.src=i;
   productoActual={nombre:n,precio:p};
 }
@@ -240,44 +224,26 @@ function cerrar(){ modal.style.display="none"; }
 
 function agregarCarrito(){
   carrito.push(productoActual);
-  actualizarCarrito();
+  actualizar();
 }
 
-function actualizarCarrito(){
-  let listaHTML="";
+function actualizar(){
+  let html="";
   let total=0;
-
-  carrito.forEach((p,index)=>{
-    let precio=parseInt(p.precio);
-    total+=precio;
-    listaHTML+=`
-      <div class="item">
-        <span>${p.nombre}</span>
-        <span>COP ${precio.toLocaleString('es-CO')}</span>
-      </div>`;
-  });
-
-  lista.innerHTML=listaHTML;
-  totalDiv = document.getElementById("total");
-  totalDiv.innerText="Total: COP "+total.toLocaleString('es-CO');
-  contador.innerText=carrito.length;
-}
-
-function enviarWhatsApp(){
-  let nombre=nombreCliente.value;
-  let total=0;
-  let detalle="";
 
   carrito.forEach(p=>{
-    let precio=parseInt(p.precio);
-    total+=precio;
-    detalle+=p.nombre+" - "+precio.toLocaleString('es-CO')+"%0A";
+    let pr=parseInt(p.precio);
+    total+=pr;
+    html+=`<div class="item">${p.nombre} - ${pr.toLocaleString()}</div>`;
   });
 
-  let msg="Pedido de: "+nombre+"%0A%0A"+detalle+
-          "%0ATotal: "+total.toLocaleString('es-CO');
+  lista.innerHTML=html;
+  total.innerText="Total: "+total.toLocaleString();
+  count.innerText=carrito.length;
+}
 
-  window.open("https://wa.me/503XXXXXXXX?text="+msg);
+function toggleCarrito(){
+  panel.style.display = panel.style.display==="block"?"none":"block";
 }
 </script>
 
