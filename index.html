@@ -20,6 +20,19 @@ header {
   font-size: 22px;
 }
 
+/* PANTALLA INICIAL */
+#inicio {
+  text-align: center;
+  padding: 30px;
+}
+
+#inicio img {
+  width: 90%;
+  max-width: 400px;
+  border-radius: 15px;
+}
+
+/* MENU */
 .menu {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -55,6 +68,7 @@ header {
   color: gray;
 }
 
+/* MODAL */
 .modal {
   position: fixed;
   top: 0;
@@ -93,7 +107,7 @@ button {
   cursor: pointer;
 }
 
-/* carrito */
+/* CARRITO */
 .carrito-box {
   position: fixed;
   bottom: 10px;
@@ -108,60 +122,73 @@ button {
 
 <body>
 
+<!-- PANTALLA INICIAL -->
+<div id="inicio">
+  <h1>🍔 Mi Restaurante</h1>
+  <img src="hamburguesa.jpg">
+  <br><br>
+  <button onclick="verMenu()">Ver menú</button>
+</div>
+
+<!-- MENU OCULTO -->
+<div id="menu" style="display:none;">
+
 <header>Menú de comida rápida</header>
 
 <div class="menu">
 
-<div class="card" onclick="abrir('Aritos de cebolla','Cortados a mano, envueltos en una mezcla ligera y fritos hasta alcanzar un dorado perfecto','7200','foto-heroe-1024x693.jpg')">
+<div class="card" onclick="abrir('Aritos de cebolla','Cortados a mano, fritos','7200','foto-heroe-1024x693.jpg')">
 <img src="foto-heroe-1024x693.jpg">
 <h3>Aritos de cebolla</h3>
 <p>COP:7,200</p>
 </div>
 
-<div class="card" onclick="abrir('Picada','Deliciosa combinación de carnes, rellena, chicharrón, acompañada de papa criolla, arepa y salsas','32000','plato1.jpg')">
+<div class="card" onclick="abrir('Picada','Combinación de carnes','32000','plato1.jpg')">
 <img src="plato1.jpg">
 <h3>Picada</h3>
 <p>COP:32,000</p>
 </div>
 
-<div class="card" onclick="abrir('Burritos','Torta rellena de carne, verdura fresca y salsas intensas','14000','burritos.jpg')">
+<div class="card" onclick="abrir('Burritos','Rellenos','14000','burritos.jpg')">
 <img src="burritos.jpg">
 <h3>Burritos</h3>
 <p>COP:14,000</p>
 </div>
 
-<div class="card" onclick="abrir('Pastel de chocolate','Deliciosa porción de pastel con intenso sabor a chocolate','5000','pastel.jpg')">
+<div class="card" onclick="abrir('Pastel','Chocolate','5000','pastel.jpg')">
 <img src="pastel.jpg">
-<h3>Pastel de chocolate</h3>
+<h3>Pastel</h3>
 <p>COP:5,000</p>
 </div>
 
-<div class="card" onclick="abrir('HOT-DOG','Salchicha jugosa en pan suave con mostaza, salsa y toppings deliciosos','10000','hot-dog.jpg')">
+<div class="card" onclick="abrir('Hot Dog','Clásico','10000','hot-dog.jpg')">
 <img src="hot-dog.jpg">
-<h3>Hot-Dog</h3>
+<h3>Hot Dog</h3>
 <p>COP:10,000</p>
 </div>
 
-<div class="card" onclick="abrir('Pizza de pepperoni','Masa crujiente con queso fundido y pepperoni','6000','pizza.png')">
+<div class="card" onclick="abrir('Pizza','Pepperoni','6000','pizza.png')">
 <img src="pizza.png">
-<h3>Pizza de pepperoni</h3>
+<h3>Pizza</h3>
 <p>COP:6,000</p>
 </div>
 
-<div class="card" onclick="abrir('Alitas Barbiquiu','Alitas jugosas bañadas en salsa BBQ','16000','alitates.jpg')">
+<div class="card" onclick="abrir('Alitas','BBQ','16000','alitates.jpg')">
 <img src="alitates.jpg">
-<h3>Alitas Barbiquiu</h3>
+<h3>Alitas</h3>
 <p>COP:16,000</p>
 </div>
 
-<div class="card" onclick="abrir('Hamburguesa','Jugosa hamburguesa con carne a la parrilla, queso derretido, lechuga fresca y salsas especiales','15000','hamburguesa.jpg')">
+<div class="card" onclick="abrir('Hamburguesa','Clásica','15000','hamburguesa.jpg')">
 <img src="hamburguesa.jpg">
 <h3>Hamburguesa</h3>
 <p>COP:15,000</p>
 </div>
 
 </div>
+</div>
 
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <img id="imgModal">
@@ -183,13 +210,17 @@ button {
 let carrito = [];
 let productoActual = {};
 
+function verMenu(){
+  document.getElementById("inicio").style.display = "none";
+  document.getElementById("menu").style.display = "block";
+}
+
 function abrir(nombre, desc, precio, img){
   document.getElementById("modal").style.display = "flex";
   document.getElementById("titulo").innerText = nombre;
   document.getElementById("desc").innerText = desc;
   document.getElementById("precio").innerText = "COP: " + precio;
   document.getElementById("imgModal").src = img;
-
   productoActual = {nombre, precio};
 }
 
