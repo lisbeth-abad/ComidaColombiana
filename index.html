@@ -247,7 +247,7 @@ function abrir(nombre, desc, precio, img){
   document.getElementById("modal").style.display = "flex";
   document.getElementById("titulo").innerText = nombre;
   document.getElementById("desc").innerText = desc;
-  document.getElementById("precio").innerText = "COP: " + precio;
+  document.getElementById("precio").innerText = "COP: " + parseInt(precio).toLocaleString('es-CO');
   document.getElementById("imgModal").src = img;
   productoActual = {nombre, precio};
 }
@@ -267,9 +267,21 @@ function verPedido(){
   let detalle = "";
 
   carrito.forEach(p => {
-    total += parseInt(p.precio);
-    detalle += p.nombre + " - COP:" + p.precio + "\n";
+    let precioNum = parseInt(p.precio);
+    total += precioNum;
+
+    detalle += p.nombre + " - COP: " + precioNum.toLocaleString('es-CO') + "\n";
   });
+
+  let fecha = new Date();
+
+  alert(
+    "Cliente: " + nombre + "\n\n" +
+    "Pedido:\n" + detalle +
+    "\nTotal: COP: " + total.toLocaleString('es-CO') +
+    "\n\nFecha: " + fecha.toLocaleString()
+  );
+}
 
   let fecha = new Date();
 
